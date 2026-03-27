@@ -7,16 +7,13 @@ const selectAllBtn = document.getElementById('selectAllBtn');
 const refreshDataBtn = document.getElementById('refreshDataBtn');
 const statusIndicator = document.getElementById('selection-status');
 const copySuccessIndicator = document.getElementById('copySuccess');
-const checkboxModeToggle = document.getElementById('checkboxModeToggle');
 const checkboxIDMode = document.getElementById('checkboxIDMode');
-const lastRefreshTimeSpan = document.getElementById('lastRefreshTime');
 
 let allData = [];
 let selectedItems = new Set();
 let dataToDisplay = [];
-let lastTimestamp = null;
 
-// --- Utility ---
+// --- Utility Functions ---
 function showCopySuccess() {
     copySuccessIndicator.style.opacity = '1';
     setTimeout(() => { copySuccessIndicator.style.opacity = '0'; }, 1500);
@@ -30,19 +27,24 @@ function copyToClipboard(text) {
     try {
         document.execCommand('copy');
         showCopySuccess();
-    } catch (err) { console.error(err); }
+    } catch (err) { console.error('Copy failed', err); }
     document.body.removeChild(textArea);
 }
 
-// --- Logic ---
+// --- Data Loading & Rendering ---
 function handleRefreshData() {
-    console.log("Attempting to load data...");
-    if (loadingIndicator) loadingIndicator.style.display = 'block';
+    console.log("Initializing data load...");
+    loadingIndicator.style.display = 'block';
+    resultsList.innerHTML = '';
     
     try {
-        if (typeof SAMPLE_API_DATA === 'undefined') throw new Error('SAMPLE_API_DATA not found. Check sample-data.js');
-        
-        allData = Object.values(SAMPLE_API_DATA.workers).map(item => ({
+        // Validation: Check if the data file actually loaded
+        if (typeof SAMPLE_API_DATA === 'undefined') {
+            throw new Error("Cannot find SAMPLE_API_DATA. Make sure sample-data.js is loaded.");
+        }
+
+        const workers = SAMPLE_API_DATA.workers;
+        allData = Object.values(workers).map(item => ({
             status: item.status || 'N/A',
             workerId: item.id || 'N/A',
             displayPhoneNumber: item.phoneNumber || 'N/A',
@@ -50,25 +52,26 @@ function handleRefreshData() {
             serialNumber: item.serialNumber || 'N/A',
             imei: item.IMEI || 'N/A'
         }));
-        
-        lastTimestamp = Date.now();
-        if (loadingIndicator) loadingIndicator.style.display = 'none';
-        performSearch();
-    } catch (e) {
-        console.error(e);
-        if (resultsList) resultsList.innerHTML = `<div style="color:red; padding:20px;">${e.message}</div>`;
+
+        console.log(`Successfully loaded ${allData.length} workers.`);
+        loadingIndicator.style.display = 'none';
+        performSearch(); // Render the data
+    } catch (error) {
+        console.error("Load Error:", error);
+        loadingIndicator.style.display = 'none';
+        resultsList.innerHTML = `<div style="color:red; text-align:center; padding:20px;">${error.message}</div>`;
     }
 }
 
 function performSearch() {
-    const search = searchInput.value.toLowerCase();
-    const filter = filterOutInput.value.toLowerCase();
+    const search = searchInput.value.toLowerCase().trim();
+    const filter = filterOutInput.value.toLowerCase().trim();
     resultsList.innerHTML = '';
 
     dataToDisplay = allData.filter(item => {
-        const text = Object.values(item).join(' ').toLowerCase();
-        const matchesSearch = search === '' || text.includes(search);
-        const matchesFilter = filter === '' || !text.includes(filter);
+        const hayStack = Object.values(item).join(' ').toLowerCase();
+        const matchesSearch = search === '' || hayStack.includes(search);
+        const matchesFilter = filter === '' || !hayStack.includes(filter);
         return matchesSearch && matchesFilter;
     });
 
@@ -77,19 +80,20 @@ function performSearch() {
         const div = document.createElement('div');
         div.className = `result-item ${isSelected ? 'selected' : ''}`;
         
-        // Compact ID Mode vs Full Mode
-        if (checkboxIDMode && checkboxIDMode.checked) {
+        const statusClass = `status-${item.status.toLowerCase()}`;
+        
+        if (checkboxIDMode.checked) {
             div.innerHTML = `
                 <div class="checkbox-container"><input type="checkbox" ${isSelected ? 'checked' : ''}></div>
                 <div class="data-content id-only-display">
                     <span class="data-value">${item.workerId}</span>
-                    <span class="status-line status-${item.status.toLowerCase()}">${item.status}</span>
+                    <span class="status-line ${statusClass}">${item.status}</span>
                 </div>`;
         } else {
             div.innerHTML = `
                 <div class="checkbox-container"><input type="checkbox" ${isSelected ? 'checked' : ''}></div>
                 <div class="data-content">
-                    <div class="status-line status-${item.status.toLowerCase()}">${item.status}</div>
+                    <div class="status-line ${statusClass}">${item.status}</div>
                     <div class="data-grid">
                         <div class="grid-entry"><strong>ID:</strong> <span class="data-value">${item.workerId}</span></div>
                         <div class="grid-entry"><strong>Phone:</strong> <span class="data-value">${item.displayPhoneNumber}</span></div>
@@ -100,15 +104,24 @@ function performSearch() {
         }
         resultsList.appendChild(div);
     });
-    
+
     statusIndicator.textContent = `${selectedItems.size} selected / ${allData.length} total`;
 }
 
-// --- Listeners (With Safety Checks) ---
-if (refreshDataBtn) refreshDataBtn.addEventListener('click', handleRefreshData);
-if (searchInput) searchInput.addEventListener('input', performSearch);
-if (filterOutInput) filterOutInput.addEventListener('input', performSearch);
-if (checkboxIDMode) checkboxIDMode.addEventListener('change', performSearch);
+// --- Event Listeners ---
+refreshDataBtn.addEventListener('click', handleRefreshData);
+searchInput.addEventListener('input', performSearch);
+filterOutInput.addEventListener('input', performSearch);
+checkboxIDMode.addEventListener('change', performSearch);
+
+selectAllBtn.addEventListener('click', () => {
+    const allOnScreenSelected = dataToDisplay.every(i => selectedItems.has(i.workerId));
+    dataToDisplay.forEach(i => {
+        if (allOnScreenSelected) selectedItems.delete(i.workerId);
+        else selectedItems.add(i.workerId);
+    });
+    performSearch();
+});
 
 resultsList.addEventListener('click', (e) => {
     const row = e.target.closest('.result-item');
@@ -122,7 +135,10 @@ resultsList.addEventListener('click', (e) => {
     const cb = row.querySelector('input');
     cb.checked = !cb.checked;
     const id = row.querySelector('.data-value').textContent;
-    cb.checked ? selectedItems.add(id) : selectedItems.delete(id);
+    
+    if (cb.checked) selectedItems.add(id);
+    else selectedItems.delete(id);
+    
     row.classList.toggle('selected');
     statusIndicator.textContent = `${selectedItems.size} selected / ${allData.length} total`;
 });
@@ -131,10 +147,16 @@ document.querySelectorAll('.multi-copy-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
         const field = e.target.dataset.field;
         const selected = allData.filter(i => selectedItems.has(i.workerId));
-        const output = selected.map(i => field === 'all' ? `${i.workerId}\t${i.displayPhoneNumber}` : i[field]).join('\n');
+        if (selected.length === 0) return;
+
+        const output = selected.map(i => {
+            if (field === 'all') return `${i.workerId}\t${i.displayPhoneNumber}\t${i.serialNumber}`;
+            return i[field];
+        }).join('\n');
+        
         copyToClipboard(output);
     });
 });
 
-// Init
+// Run on startup
 document.addEventListener('DOMContentLoaded', handleRefreshData);
