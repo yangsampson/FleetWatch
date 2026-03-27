@@ -1,231 +1,212 @@
-/* Global & Centering Styles */
+/* --- Global Styles --- */
 body {
-    /* Use Flexbox to center the content block */
     display: flex;
     justify-content: center;
-    align-items: flex-start; /* Keeps content near the top */
-    min-height: 100vh; /* Full viewport height for centering */
-    padding: 20px;
+    align-items: flex-start;
+    min-height: 100vh;
     margin: 0;
-    background-color: #f0f0f0; /* Light gray background */
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-}
-
-/* Main Application Container (The "Card") */
-#app-container {
-    width: 100%;
-    max-width: 450px; /* Fixed width for the card */
-    padding: 15px;
-    background-color: #ffffff; /* White card background */
-    border: 1px solid #ddd;
-    border-radius: 8px; /* Rounded corners */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    padding: 40px 20px; /* More breathing room for a webpage */
+    background-color: #f8f9fa; /* Softer professional gray */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
     box-sizing: border-box;
 }
 
-h3 {
+/* --- Main Webpage Container --- */
+#app-container {
+    width: 100%;
+    max-width: 900px; /* Expanded for a full-page feel */
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05); /* Softer shadow */
+}
+
+h1, h3 {
+    text-align: center;
     margin-top: 0;
     color: #333;
 }
 
-/* Input and Action Bar */
-#searchInput {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
+/* --- Inputs --- */
+.search-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Side-by-side search on wide screens */
+    gap: 15px;
+    margin-bottom: 20px;
 }
 
+#searchInput, #filterOutInput {
+    width: 100%;
+    padding: 12px 15px;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: border-color 0.2s;
+}
+
+#searchInput:focus, #filterOutInput:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* --- Actions Bar --- */
 #actions {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 10px;
     align-items: center;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    background-color: #fff;
+    background: #fdfdfd;
+    padding: 10px;
+    border-radius: 8px;
 }
 
-/* Styles moved from index.html */
-.category-actions {
-    display: flex;
-    gap: 5px;
-    margin-top: 5px;
-    width: 100%;
-    justify-content: space-between;
+/* --- Bulk Copy Grid --- */
+#category-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); /* Grid layout for web */
+    gap: 10px;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+    margin-bottom: 20px;
 }
 
-#checkboxModeToggle {
-    margin-left: 5px;
-}
-
-#loading {
-    color: gray;
-    text-align: center;
-    margin-top: 10px;
-    display: none;
-}
-
-/* Buttons (General) */
-button {
-    background-color: #eee;
+/* --- Buttons --- */
+button, .button-like {
+    padding: 10px 15px;
+    font-size: 14px;
     border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: 6px 12px;
+    background-color: #fff;
+    border-radius: 6px;
     cursor: pointer;
-    font-size: 12px;
-    transition: background-color 0.15s;
+    transition: all 0.2s;
 }
+
 button:hover {
-    background-color: #e0e0e0;
+    background-color: #f0f0f0;
+    transform: translateY(-1px);
 }
 
-/* Specific Button Colors */
-#refreshDataBtn {
-    background-color: #d4edda;
-    border-color: #c3e6cb;
-    color: #155724;
-}
-#refreshDataBtn:hover {
-    background-color: #c3e6cb;
-}
+#refreshDataBtn { background-color: #e6ffed; border-color: #b7e1c1; }
+#refreshDataBtn:hover { background-color: #d1f7da; }
 
-.multi-copy-btn {
-    font-size: 11px;
-    padding: 4px 8px;
-    border-radius: 20px;
-}
+#appleMesBtn { background-color: #ffe6e6; border-color: #e1b7b7; }
+#appleMesBtn:hover { background-color: #f7d1d1; }
 
-.multi-copy-btn {
-    background-color: #e9ecef;
-    border-color: #ced4da;
-    color: #495057;
-}
-.multi-copy-btn:hover {
-    background-color: #ced4da;
-}
-
-/* Last Refresh and Order Mode */
-#lastRefreshTime {
-    font-size: 11px;
-    color: #555;
-    margin-right: 10px;
-}
+#lastRefreshTime { font-size: 12px; color: #777; }
 
 #modeToggleContainer {
-    margin-left: auto; /* Pushes to the far right */
+    margin-left: auto;
     display: flex;
-    align-items: center;
-    font-size: 12px;
-    color: #555;
-    padding-left: 10px;
-    border-left: 1px solid #eee;
-}
-
-/* Status and Results List */
-#selection-status {
-    font-size: 12px;
-    color: #007bff;
-    margin-bottom: 10px;
-    padding-left: 5px;
-}
-
-#resultsList {
-    max-height: 700px; /* Longer list */
-    overflow-y: auto;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-}
-
-/* Individual Result Item */
-.result-item {
-    border-bottom: 1px solid #eee;
-    padding: 10px 8px;
-    font-size: 13px;
-    display: flex;
-    align-items: flex-start;
-    transition: background-color 0.15s, border-left 0.15s;
-}
-.result-item:last-child {
-    border-bottom: none;
-}
-.result-item:hover { background-color: #f9f9f9; }
-.result-item.selected {
-    background-color: #e7f5ff;
-    border-left: 4px solid #007bff;
-    padding-left: 4px;
-}
-
-.checkbox-container {
-    padding-right: 10px;
-    padding-top: 2px;
-    flex-shrink: 0;
-}
-
-/* UPDATED STYLES START HERE */
-
-.data-content {
-    flex-grow: 1;
-    padding: 0 10px;
-}
-
-/* New Status Header */
-.status-header {
-    text-align: center;
-    font-weight: bold;
+    gap: 15px;
     font-size: 14px;
-    padding: 4px;
-    margin-bottom: 8px;
-    line-height: 1;
 }
 
-/* New 2-Column Grid */
-.data-grid {
-    display: grid;
-    grid-template-columns: 70px 1fr; /* 70px for labels, rest for values */
-    gap: 6px 10px; /* 6px row gap, 10px column gap */
-    line-height: 1.4;
-}
-
-/* Labels and Values */
-.data-grid strong {
+#selection-status {
+    font-size: 13px;
+    color: #666;
     font-weight: bold;
+    margin-top: 10px;
     text-align: right;
 }
 
-.copyable-value {
+/* --- Results List --- */
+#resultsList {
+    margin-top: 10px;
+    border-top: 1px solid #eee;
+}
+
+/* Card-style result items for a better web feel */
+.result-item {
+    background: #fff;
+    border: 1px solid #eee;
+    margin-bottom: 10px;
+    padding: 15px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.result-item:hover {
+    border-color: #007bff55;
+}
+
+.result-item.selected {
+    background-color: #f0f7ff;
+    border-color: #007bff;
+}
+
+.checkbox-container {
+    padding-right: 20px;
+}
+
+.data-content {
+    flex-grow: 1;
+}
+
+.status-line {
+    font-weight: 800;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+}
+
+/* Two-column data layout for wider screens */
+.data-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 8px 20px;
+    width: 100%;
+}
+
+.grid-entry {
+    display: flex;
+    gap: 10px;
+}
+
+.grid-entry strong {
+    min-width: 60px;
+    color: #888;
+    font-size: 12px;
+}
+
+.data-value {
+    font-family: 'JetBrains Mono', 'Fira Code', 'Menlo', monospace;
     cursor: pointer;
-    text-align: left;
-    transition: color 0.15s;
-    word-break: break-all; /* Prevents long values from overflowing */
+    color: #0056b3;
+    font-size: 14px;
 }
-.copyable-value:hover {
+
+.data-value:hover {
     text-decoration: underline;
-    color: #007bff;
+    background-color: #e9ecef;
 }
 
-/* Status Styling (Unchanged, still works) */
-.status-online { color: green; font-weight: bold; }
-.status-degraded { color: orange; font-weight: bold; }
-.status-offline { color: red; font-weight: bold; }
+/* Status Colors */
+.status-online { color: #28a745; }
+.status-degraded { color: #fd7e14; }
+.status-offline { color: #dc3545; }
 
-/* Copy success confirmation */
+/* Copy Success Popup */
 #copySuccess {
     position: fixed;
-    top: 20px;
-    right: 20px;
-    background-color: #28a745;
+    bottom: 30px; /* Moved to bottom for web experience */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
     color: white;
-    padding: 8px 15px;
-    border-radius: 5px;
+    padding: 12px 25px;
+    border-radius: 30px;
     z-index: 10000;
-    transition: opacity 0.5s;
+    transition: opacity 0.3s;
     opacity: 0;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .search-group { grid-template-columns: 1fr; }
+    #modeToggleContainer { width: 100%; margin-top: 10px; justify-content: center; }
 }
