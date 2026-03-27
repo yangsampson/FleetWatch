@@ -1,47 +1,55 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Oracle Worker Search</title>
-    <link rel="stylesheet" href="style.css">
-    
-    <script src="sample-data.js"></script>
-    
-    <script src="script.js" defer></script>
+    <meta charset="UTF-8">
+    <title>Worker Search</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="sidepanel.css">
 </head>
 <body>
-    <div id="app-container">
-        <h3>Oracle Worker Search</h3>
-        <input type="text" id="searchInput" placeholder="Search ID, Phone, Company, IMEI, or Serial">
-        
-        <div id="actions">
-            <button id="selectAllBtn" title="Select/Deselect all currently visible results">Select All</button>
-            <button id="refreshDataBtn" title="Manually fetch data from the API.">Refresh Data</button>
 
-            <span id="lastRefreshTime">Loading status...</span>
+    <div id="app-container">
+        <h3>Worker Search</h3>
+        
+        <input type="text" id="searchInput" placeholder="Search ID, Phone, Company, Status, ...">
+        <input type="text" id="filterOutInput" placeholder="Filter OUT results by ID, Phone, Company, etc. (Optional)">
+
+        <div id="actions">
+            <button id="selectAllBtn" title="Select all currently visible results">Select All</button>
+            <button id="refreshDataBtn" title="Refresh data from API">Refresh</button>
+            <span id="lastRefreshTime">Never</span>
 
             <div id="modeToggleContainer">
-                <label for="checkboxModeToggle" title="Search multiple items separated by whitespace and preserve their order in the results.">Order Mode</label>
-                <input type="checkbox" id="checkboxModeToggle">
+                <div class="mode-group">
+                    <input type="checkbox" id="checkboxIDMode">
+                    <label for="checkboxIDMode" title="Display only Worker ID and Status.">ID Mode</label>
+                </div>
+                <div class="mode-group">
+                    <input type="checkbox" id="checkboxModeToggle">
+                    <label for="checkboxModeToggle" title="Search multiple items separated by whitespace and preserve their order.">Order Mode</label>
+                </div>
             </div>
-
-            <div class="category-actions flex-grow">
-                <button class="multi-copy-btn" data-field="all" title="Copy ID, Phone, and Serial for all selected items, separated by tabs.">All</button>
-                <button class="multi-copy-btn" data-field="status" title="Copy Status">Status</button>
-                <button class="multi-copy-btn" data-field="workerId" title="Copy Worker IDs">IDs</button>
-                <button class="multi-copy-btn" data-field="displayPhoneNumber" title="Copy Phone Numbers">Phone#</button>
-                <button class="multi-copy-btn" data-field="companyAssigned" title="Copy Companies">Company</button>
-                <button class="multi-copy-btn" data-field="serialNumber" title="Copy Serial Numbers">Serials</button>
-                <button class="multi-copy-btn" data-field="imei" title="Copy IMEIs">IMEIs</button>
-            </div>
-
         </div>
 
-        <div id="selection-status">0 items selected out of 0 loaded items</div>
-
-        <div id="loading">Fetching data from the API...</div>
+        <div id="category-actions">
+            <button class="multi-copy-btn" data-field="all" title="Copy ID, Phone, and Serial for all selected items, separated by tabs.">All</button>
+            <button class="multi-copy-btn" data-field="status" title="Copy Status">Status</button>
+            <button class="multi-copy-btn" data-field="workerId" title="Copy Worker IDs">IDs</button>
+            <button class="multi-copy-btn" data-field="displayPhoneNumber" title="Copy Phone Numbers">#</button>
+            <button class="multi-copy-btn" data-field="companyAssigned" title="Copy Companies">Company</button>
+            <button class="multi-copy-btn" data-field="serialNumber" title="Copy Serial Numbers">Serials</button>
+            <button class="multi-copy-btn" data-field="imei" title="Copy IMEIs">IMEIs</button>
+            <button id="appleMesBtn" type="button" title="Copies a random iMessage request message to clipboard.">Apple Message</button>
+            
+            <div id="selection-status">0 items selected out of 0 loaded items</div>
+        </div>
+        
+        <div id="loading">Click "Refresh" to load worker details...</div>
         <div id="resultsList"></div>
-        <div id="copySuccess">Copied!</div>
     </div>
-    
+
+    <div id="copySuccess">Copied!</div>
+
+    <script src="script.js"></script>
 </body>
 </html>
