@@ -1,0 +1,217 @@
+/* --- Global Resets --- */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    margin: 0;
+    padding: 40px 20px;
+    background-color: #f4f7f6; /* Modern light gray */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #333;
+}
+
+/* --- Main Webpage Container --- */
+#app-container {
+    width: 100%;
+    max-width: 550px; /* Constrained width to prevent the 'stretched' look */
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    border: 1px solid #e1e4e8;
+}
+
+h1 {
+    font-size: 22px;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #1a1a1a;
+}
+
+/* --- Search Area --- */
+.search-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+#searchInput, #filterOutInput {
+    width: 100%;
+    padding: 10px 14px;
+    box-sizing: border-box;
+    border: 1px solid #d1d5da;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#searchInput:focus, #filterOutInput:focus {
+    border-color: #0366d6;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(3, 102, 214, 0.1);
+}
+
+/* --- Action Bar (Select All, Refresh, Toggles) --- */
+#actions {
+    display: flex;
+    justify-content: space-between; /* Pushes buttons left, toggles right */
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 8px 0;
+}
+
+.left-buttons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+#modeToggleContainer {
+    display: flex;
+    gap: 12px;
+    font-size: 13px;
+    color: #586069;
+}
+
+.mode-group {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* --- Bulk Copy Grid (The Row of Buttons) --- */
+#category-actions {
+    display: grid;
+    /* Auto-adjusts columns now that Apple button is gone */
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); 
+    gap: 6px;
+    border-top: 1px solid #eaecef;
+    padding-top: 15px;
+    margin-bottom: 10px;
+}
+
+/* --- Button Styling --- */
+button {
+    padding: 7px 12px;
+    font-size: 13px;
+    font-weight: 500;
+    border: 1px solid #d1d5da;
+    background-color: #fafbfc;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.1s ease;
+}
+
+button:hover {
+    background-color: #f3f4f6;
+    border-color: #1b1f2326;
+}
+
+#refreshDataBtn { background-color: #f0fff4; border-color: #34d0584d; color: #22863a; }
+#refreshDataBtn:hover { background-color: #dcffe4; }
+
+.multi-copy-btn {
+    background-color: #ffffff;
+}
+
+#selection-status {
+    font-size: 12px;
+    color: #6a737d;
+    text-align: right;
+    margin-bottom: 15px;
+}
+
+/* --- Results List --- */
+#resultsList {
+    border-top: 1px solid #eaecef;
+}
+
+.result-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 10px;
+    border-bottom: 1px solid #f6f8fa;
+    transition: background-color 0.2s;
+}
+
+.result-item:hover {
+    background-color: #fbfbfc;
+}
+
+.result-item.selected {
+    background-color: #f1f8ff;
+}
+
+.checkbox-container {
+    margin-right: 15px;
+}
+
+.data-content {
+    flex-grow: 1;
+}
+
+/* --- Data Grid & Status --- */
+.status-line {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+}
+
+.data-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 15px;
+}
+
+.grid-entry {
+    font-size: 13px;
+    display: flex;
+    gap: 6px;
+}
+
+.grid-entry strong {
+    color: #6a737d;
+    min-width: 45px;
+}
+
+.data-value {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    color: #0366d6;
+    cursor: pointer;
+}
+
+.data-value:hover {
+    text-decoration: underline;
+}
+
+/* ID Mode Layout */
+.id-only-display {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Status Colors */
+.status-online { color: #28a745; }
+.status-degraded { color: #dbab09; }
+.status-offline { color: #d73a49; }
+
+/* Feedback Toast */
+#copySuccess {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #24292e;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 13px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+    z-index: 9999;
+}
