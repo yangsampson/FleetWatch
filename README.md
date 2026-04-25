@@ -31,10 +31,22 @@ This project marks a complete migration from a "mock data" architecture to a per
 ## 🛠️ Key Enhancements in v2
 
 * **Dynamic Data Sync:** Real-time fetching via MongoDB, ensuring worker statuses and IDs are always accurate and persistent.
-* **Advanced Multi-Filter:** The search engine allows for complex queries (e.g., searching for a specific company and a status like "Offline" simultaneously).
+* **Advanced Multi-Filter:** A custom search engine supporting space-separated terms, allowing complex queries (e.g., searching for a specific company and "Offline" status simultaneously).
 * **High-Density "ID Mode":** A UI toggle that optimizes the layout for monitoring large fleets by collapsing details into a compact view.
-* **Refined Selection Engine:** A modernized selection UI with bulk "copy-to-clipboard" functionality for specific data fields (IDs, Phones, or full tab-separated rows).
-* **Semantic Status UI:** Improved visual feedback with custom status styles, including a dedicated yellow warning state for "Degraded" workers.
+* **Refined Selection Engine:** Modernized selection UI with "toggle-to-clear" logic and bulk "copy-to-clipboard" functionality for IDs, Phones, or tab-separated rows.
+* **Semantic Status UI:** Improved visual feedback including a dedicated yellow warning state for **"Degrade"** workers.
+* **Schema Modernization:** Transitioned legacy data fields to a structured `assignedCompany` model for improved database queries.
+
+---
+
+## 🤖 AI-Augmented Workflow
+
+This project utilizes an **AI-augmented development cycle** using **Google Gemini**. 
+
+By integrating AI as a senior pair-programming partner, I maintained full architectural ownership while leveraging the tool for:
+* **Edge-Case Auditing:** Ensuring multi-filter string parsing handles varied user inputs without performance lag.
+* **UI Refinement:** Optimizing Tailwind CSS layouts for seamless mobile-to-desktop transitions.
+* **Velocity Multiplier:** Rapidly iterating on selection state logic and automated data migration scripts.
 
 ---
 
